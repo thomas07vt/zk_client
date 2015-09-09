@@ -173,6 +173,39 @@ raw_client.class
 
 ```
 
+#### How Root Path works
+Depending on your Zookeeper server you might have nested nodes that stores your application data. It can be quite annoying writing the leading path when that doesn't change. Lets say you share Zookeeper server accross your organization, and you need to specify your department and application name. When you acccess your data, it might look something like this:
+
+```ruby
+require 'zk_client'
+
+ZkClient.root_path
+#=> "/"
+
+ZkClient.read('/org/department/application/my_data')
+#=> "This is my data!"
+
+```
+
+That's annoying. Any you might accidentally mess with other people's data  if you fat finger the application name. ZkClient allows you to configure a root path and use relative paths to access data:
+
+```ruby
+require 'zk_client'
+
+ZkClient.root_path = '/org/department/application'
+ZkClient.root_path
+#=> "/org/department/application"
+
+ZkClient.read('/my_data')
+#=> "This is my data!"
+
+# It will also append a leading '/' if you forget....
+ZkClient.read('my_data')
+#=> "This is my data!"
+
+```
+
+
 
 ## Contributing
 
