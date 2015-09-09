@@ -75,14 +75,6 @@ module ZkClient
       @@port = port.to_i
     end
 
-    #def scheme
-    #  @@scheme ||= 'http'
-    #end
-
-    #def scheme=(scheme)
-    #  @@scheme = scheme
-    #end
-
     def uri
       "#{host}:#{port}"
     end
@@ -90,7 +82,6 @@ module ZkClient
     def uri=(uri)
       parsed_uri = URI(uri)
 
-      #@@scheme    = parsed_uri.scheme
       @@host      = parsed_uri.host
       @@port      = parsed_uri.port
       @@root_path = parsed_uri.path
