@@ -7,7 +7,7 @@ A simple Zookeeper client used in the Mojo framework. This gem allows quick and 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'zk_client', :git => 'https://git.autodesk.com/EIS-EA-MOJO/zk_client.git'
+gem 'zk_client'
 ```
 
 And then execute:
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install zk_client --source http://10.40.83.93 # This is a local gem server
+    $ gem install zk_client
 
 ## Usage
 
