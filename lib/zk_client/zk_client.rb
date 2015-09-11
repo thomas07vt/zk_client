@@ -98,7 +98,6 @@ module ZkClient
       if defined?(@@client) && @@client.respond_to?(close)
         @@client.close
       end
-puts "CLIENT CREATE: #{uri}"
       Zookeeper.new(uri)
     end
 
@@ -107,10 +106,6 @@ puts "CLIENT CREATE: #{uri}"
       path = "#{root_path}#{path}" unless path.start_with?(root_path)
 
       path
-    end
-
-    def build_uri
-
     end
 
   end # End class methods
