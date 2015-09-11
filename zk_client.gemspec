@@ -9,10 +9,6 @@ Gem::Specification.new do |spec|
   spec.authors       = ["John Thomas"]
   spec.email         = ["john.thomas@autodesk.com"]
 
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = 'http://10.40.83.93'
-  end
-
   spec.summary       = "A simple Zookeeper client used in the Mojo framework."
   spec.description   = %q{ This gem allows quick and simple access to a Zookeeper
 server.
