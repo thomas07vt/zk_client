@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'pry'
 
 describe ZkClient do
   it 'has a version number' do
@@ -80,6 +81,11 @@ describe ZkClient do
     before do
       expect(ZkClient.client.connected?).to eq(true)
     end
+
+    after do
+      ZkClient.reopen
+    end
+
     it 'closes the client connection' do
       ZkClient.close
       expect(ZkClient.client.connected?).to eq(false)
@@ -184,6 +190,9 @@ describe ZkClient do
   end
 
   context '.config' do
+    after do
+      ZkClient.root_path = '/zk_client'
+    end
 
     it 'exposes the uri method' do
       ZkClient.config do |zk|
@@ -207,6 +216,58 @@ describe ZkClient do
       expect(ZkClient.root_path).to eq('/rspec')
     end
 
+  end
+
+  context '.children' do
+    describe 'when the node does not exist' do
+      before do
+        expect(ZkClient.read_node("/doesntexist")[:stat].exists).to eq(false)
+      end
+
+      it 'returns nil' do
+        expect(ZkClient.children('/doesntexist')).to eq(nil)
+      end
+
+    end
+
+    describe 'when the node exists but has no children' do
+      before do
+        ZkClient.write("/no_children", "data")
+        expect(ZkClient.read_node("/no_children")[:stat].numChildren).to eq(0)
+      end
+
+      it 'returns an empy array' do
+        expect(ZkClient.children('/no_children')).to eq([])
+      end
+
+    end
+
+    describe 'when the node has children' do
+      before do
+        puts "HERE: #{ZkClient.read_node("/")}"
+        puts "#{ZkClient.root_path}"
+        expect(ZkClient.read_node("/")[:stat].numChildren).to eq(1)
+      end
+
+      it 'returns nil' do
+        expect(ZkClient.children('/')).to eq(["no_children"])
+      end
+
+    end
+  end
+
+  context '.reopen' do
+    before do
+      ZkClient.host = 'localhost'
+      ZkClient.port = 2181
+      ZkClient.close
+      expect(ZkClient.client.connected?).to eq(false)
+    end
+
+    it 'connects a closed Zookeeper.new() client' do
+      ZkClient.reopen
+      expect(ZkClient.client.connected?).to eq(true)
+    end
   end
 
 

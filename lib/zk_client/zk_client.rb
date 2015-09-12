@@ -41,8 +41,17 @@ module ZkClient
       client.delete(path: key)
     end
 
+    def children(path)
+      key = process_path(path)
+      client.get_children(path: key)[:children]
+    end
+
     def close
       client.close
+    end
+
+    def reopen
+      @@client = create_client
     end
 
     def config
@@ -95,7 +104,7 @@ module ZkClient
     private
 
     def create_client
-      if defined?(@@client) && @@client.respond_to?(close)
+      if defined?(@@client) && @@client.respond_to?(:close)
         @@client.close
       end
       Zookeeper.new(uri)
@@ -104,6 +113,7 @@ module ZkClient
     def process_path(path)
       path = "/#{path}"            unless path.start_with?('/')
       path = "#{root_path}#{path}" unless path.start_with?(root_path)
+      path = path[0...-1] if path[-1] == '/' # Remove trailing slash
 
       path
     end
