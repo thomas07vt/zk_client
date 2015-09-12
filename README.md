@@ -144,6 +144,24 @@ ZkClient.read_node('/mynode')
 #=> {:req_id=>9, :rc=>-101, :data=>nil, :stat=>#<Zookeeper::Stat:0x00000002803f70 @exists=false>}
 ```
 
+##### Getting a node's children
+
+```ruby
+require 'zk_client'
+
+# If the root node has children:
+ZkClient.children('/')
+#=> ['firstchild', 'secondchild']
+
+# If the root node has no children:
+ZkClient.children('/')
+#=> []
+
+# If the node you call children on doesn't exist:
+ZkClient.children('/doesnotexist')
+#=> nil
+```
+
 ##### Close connection to ZK
 
 ```ruby
@@ -155,6 +173,20 @@ ZkClient.close
 #=> nil
 ZkClient.client.connected?
 #=> false 
+
+```
+
+##### Reopen a closed connection or close the existing connection and create a new connection
+
+```ruby
+require 'zk_client'
+
+ZkClient.close
+#=> nil 
+ZkClient.reopen
+#=> #<Zookeeper::Client: .....
+ZkClient.client.connected?
+#=> true 
 
 ```
 
