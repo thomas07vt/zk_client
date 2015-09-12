@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'pry'
 
 describe ZkClient do
   it 'has a version number' do
@@ -219,6 +218,22 @@ describe ZkClient do
   end
 
   context '.children' do
+    describe 'when the root_path is "/"' do
+      before do
+        ZkClient.host = 'localhost'
+        ZkClient.root_path = '/'
+        ZkClient.port = 2181
+      end
+
+      after do
+        ZkClient.root_path = '/zk_client'
+      end
+
+      it 'returns root nodes' do
+        expect(ZkClient.children('/')).to_not eq(nil)
+      end
+    end
+
     describe 'when the node does not exist' do
       before do
         expect(ZkClient.read_node("/doesntexist")[:stat].exists).to eq(false)
@@ -244,8 +259,6 @@ describe ZkClient do
 
     describe 'when the node has children' do
       before do
-        puts "HERE: #{ZkClient.read_node("/")}"
-        puts "#{ZkClient.root_path}"
         expect(ZkClient.read_node("/")[:stat].numChildren).to eq(1)
       end
 
@@ -259,6 +272,7 @@ describe ZkClient do
   context '.reopen' do
     before do
       ZkClient.host = 'localhost'
+      ZkClient.root_path = '/zk_client'
       ZkClient.port = 2181
       ZkClient.close
       expect(ZkClient.client.connected?).to eq(false)

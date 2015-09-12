@@ -111,9 +111,9 @@ module ZkClient
     end
 
     def process_path(path)
-      path = "/#{path}"            unless path.start_with?('/')
-      path = "#{root_path}#{path}" unless path.start_with?(root_path)
+      path = "/#{path}" unless path.start_with?('/') # We want leading slash
       path = path[0...-1] if path[-1] == '/' # Remove trailing slash
+      path = "#{root_path}#{path}" unless path.start_with?(root_path)
 
       path
     end
