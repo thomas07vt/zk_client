@@ -9,7 +9,7 @@ module ZkCache
     end
 
     def read(key)
-      path = process_path(key)
+      path = _process_path(key)
       _cache[path]
     end
 
@@ -18,7 +18,7 @@ module ZkCache
       self.to_s
     end
 
-    def delete_cache
+    def destroy_cache
       @@cache = {}
     end
 
@@ -36,7 +36,7 @@ module ZkCache
       @@cache ||= {}
     end
 
-    def process_path(path)
+    def _process_path(path)
       path = "/#{path}" unless path.start_with?('/') # We want leading slash
       path = path[0...-1] if path[-1] == '/' # Remove trailing slash
       path = "#{root_path}#{path}" unless path.start_with?(root_path)
@@ -51,7 +51,7 @@ module ZkCache
       children = ZkClient.children(path)
       if children && children.any?
         children.each do |child|
-          load_cache("#{path}/#{child}")
+          _load_cache("#{path}/#{child}")
         end
       end
     end
