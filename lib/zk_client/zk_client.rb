@@ -89,7 +89,7 @@ module ZkClient
     end
 
     def uri=(uri)
-      parsed_uri = URI(uri)
+      parsed_uri = URI(schemeify(uri))
 
       @@host      = parsed_uri.host
       @@port      = parsed_uri.port
@@ -116,6 +116,14 @@ module ZkClient
       path = "#{root_path}#{path}" unless path.start_with?(root_path)
 
       path
+    end
+
+    def schemeify(uri)
+      if (uri =~ /^http(s)?:\/\/(.)+/) == 0
+        uri
+      else
+        "http://#{uri}"
+      end
     end
 
   end # End class methods
