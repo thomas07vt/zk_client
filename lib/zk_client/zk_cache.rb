@@ -56,7 +56,7 @@ module ZkCache
       children = ZkClient.children(path)
       if children && children.any?
         children.each do |child|
-          _load_cache("#{path}/#{child}")
+          _load_cache(_process_path("#{path}/#{child}"))
         end
       end
     end
