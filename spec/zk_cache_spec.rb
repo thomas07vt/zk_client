@@ -31,7 +31,7 @@ describe ZkCache do
 
     it 'loads all data from zk' do
       cache = JSON.parse(ZkCache.load_cache)
-      expect(cache.keys).to eq(@keys)
+      expect(@keys - cache.keys).to eq([])
     end
   end
 

@@ -5,7 +5,8 @@ module ZkCache
   class << self
 
     def cache(key, value)
-      _cache[key] = value
+      path = _process_path(key)
+      _cache[path] = value
     end
 
     def read(key)
@@ -28,6 +29,10 @@ module ZkCache
 
     def root_path
       ZkClient.root_path
+    end
+
+    def all
+      _cache
     end
 
     private
